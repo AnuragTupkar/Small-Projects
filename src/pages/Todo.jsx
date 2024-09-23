@@ -5,12 +5,13 @@ function Todo() {
   const [task, setTask] = useState('');
   const [list, setList] = useState([]);
   const [check, setCheck] = useState("bg-blue-500")
+  const [edit, setEdit] = useState(false)
   const addTask = (e) => {
     e.preventDefault(); 
-
     if (task.trim()) {
       setList([...list, { id: nanoid(), task }]); 
       setTask(''); 
+
     }
   };
   const deleteTask = (id)=>{
@@ -20,7 +21,7 @@ function Todo() {
 
   const completedTask = (id)=>{
     let taskStatus = check == "bg-blue-500" ? "" : "bg-blue-500"
-    // taskStatus = taskStatus.filter((e)=>e.id != id)
+   
     setCheck(taskStatus);
   }
   return (
@@ -29,11 +30,12 @@ function Todo() {
         <div className="text-center">
           <h1 className="text-center text-4xl font-bold mt-8">Todo List</h1>
           <form className="mt-20">
+            
             <input
               className="border-2 w-96 h-14 p-4 todo rounded-md shadow"
               placeholder="Enter text"
               value={task} 
-              onChange={(e) => setTask(e.target.value)}
+              onChange={(e) => setTask(e.target.value) }
             />
             <button
               className="p-4 border-t-emerald-600 border rounded-lg bottom-8 hover:text-white hover:bg-black mx-8 w-32"
@@ -48,13 +50,19 @@ function Todo() {
           {list.map((e) => (
             
             <div key={e.id} className="toDoList flex justify-center p-2">
-              <h1 className={`w-96 h-14 font-bold rounded-md pt-3 pl-4 mr-10 items-center border  ${check} text-lg`}>
+              {edit == false ?<h1 className={`w-96 h-14 font-bold rounded-md pt-3 pl-4 mr-10 items-center border  ${check} text-lg`}>
                 {e.task}
-              </h1>
+              </h1>:<input
+              className="border-2 w-96 h-14 p-4 todo rounded-md shadow"
+              placeholder="Enter text"
+              value={task} 
+              onChange={(e) => setTask(e.target.value) }
+            />}
+              
               <div>
                 <input type="checkbox" onClick={()=> completedTask(e.id)} />
-                <button className="p-4 border-t-emerald-600 rounded-md bottom-8 hover:text-white hover:bg-black">
-                  Edit
+                <button onClick={()=>setEdit(edit.id == true?false:true)}className="p-4 border-t-emerald-600 rounded-md bottom-8 hover:text-white hover:bg-black">
+                  {edit.id == false ?"Edit":"Add"}
                 </button>
                 <button onClick={()=>deleteTask(e.id)} className="p-4 border-t-emerald-600 rounded-md bottom-8 hover:text-white hover:bg-black">
                   Delete
